@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yönetici Paneli | Emlak Advisor</title>
+    <link rel="stylesheet" href="/src/style.css">
+    <!-- Anti-FOUC Script -->
+    <style>
+        body {
+            opacity: 0;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.body.style.opacity = "1";
+        });
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: var(--primary-color);
+            color: white;
+            padding: 30px;
+            flex-shrink: 0;
+        }
+
+        .sidebar h2 {
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            margin-bottom: 20px;
+        }
+
+        .sidebar a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            color: white;
+        }
+
+        .main-content {
+            flex: 1;
+            overflow-x: hidden;
+        }
+
+        #property-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            width: 650px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        .form-group {
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            outline: none;
+        }
+
+        .dynamic-section {
+            display: none;
+            border: 1px dashed var(--pastel-blue);
+            padding: 20px;
+            border-radius: 15px;
+            background: #fafafa;
+        }
+
+        .admin-tab-content {
+            display: none;
+        }
+
+        .admin-tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <span><i class="fas fa-building"></i> Emlak Advisor</span>
+            </div>
+            <div class="top-bar-right">
+                <a href="tel:+905551234567"><i class="fas fa-phone-alt"></i> +90 555 123 45 67</a>
+                <a href="mailto:info@emlakadvisor.com"><i class="fas fa-envelope"></i> info@emlakadvisor.com</a>
+            </div>
+        </div>
+    </div>
+    <div class="admin-layout">
+        <aside class="sidebar">
+            <h2 class="logo" style="color: white; margin-bottom: 40px;">Emlak<span>Advisor</span></h2>
+            <ul>
+                <li><a href="javascript:void(0)" onclick="switchTab('ilanlar')" id="tab-ilanlar" class="active"><i
+                            class="fas fa-home"></i> İlanlar</a></li>
+                <li><a href="javascript:void(0)" onclick="switchTab('musteriler')" id="tab-musteriler"><i
+                            class="fas fa-users"></i> Müşteriler</a></li>
+                <li><a href="javascript:void(0)" onclick="switchTab('bloglar')" id="tab-bloglar"><i
+                            class="fas fa-blog"></i> Bloglar</a></li>
+                <li><a href="javascript:void(0)" onclick="switchTab('silinenler')" id="tab-silinenler"><i
+                            class="fas fa-archive"></i> Silinenler</a></li>
+                <li><a href="/"><i class="fas fa-external-link-alt"></i> Siteyi Gör</a></li>
+                <li><a href="javascript:void(0)" onclick="logout()" style="color: #ff7675;"><i
+                            class="fas fa-sign-out-alt"></i> Çıkış Yap</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <!-- İlanlar Tab -->
+            <section id="content-ilanlar" class="admin-tab-content active admin-dashboard-container">
+                <header class="dash-top-bar">
+                    <h1>ilanlar</h1>
+                    <div class="dash-user-actions">
+                        <div class="dash-notification">
+                            <i class="far fa-bell"></i>
+                            <div class="dash-notif-dot"></div>
+                        </div>
+                        <div class="dash-user-profile">
+                            <i class="fas fa-user-circle"></i>
+                            <b>Admin</b>
+                        </div>
+                    </div>
+                </header>
+
+                <div class="dash-actions-row">
+                    <div class="dash-search-container">
+                        <i class="fas fa-search"></i>
+                        <input type="text" class="dash-search-input" id="dash-search"
+                            placeholder="İlan veya konum ara...">
+                    </div>
+                    <button class="btn-orange" onclick="showModal()"><i class="fas fa-plus"></i> Yeni İlan</button>
+                </div>
+
+                <div class="dash-table-card">
+                    <table class="dash-table">
+                        <thead>
+                            <tr>
+                                <th>İlan</th>
+                                <th>Konum</th>
+                                <th>Fiyat</th>
+                                <th>Tür</th>
+                                <th>Durum</th>
+                                <th>Tarih</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="dash-property-list"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Müşteriler Tab -->
+            <section id="content-musteriler" class="admin-tab-content admin-dashboard-container">
+                <header class="dash-top-bar">
+                    <h1>Müşteri Talepleri</h1>
+                </header>
+                <div class="dash-table-card">
+                    <table class="dash-table">
+                        <thead>
+                            <tr>
+                                <th>Müşteri</th>
+                                <th>İletişim</th>
+                                <th>Yatırım Türü</th>
+                                <th>Bütçe</th>
+                                <th>Durum</th>
+                                <th>Tarih</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-customer-list"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Silinenler Tab -->
+            <section id="content-silinenler" class="admin-tab-content admin-dashboard-container">
+                <header class="dash-top-bar">
+                    <h1>Silinen Müşteriler</h1>
+                </header>
+                <div class="dash-table-card">
+                    <table class="dash-table">
+                        <thead>
+                            <tr>
+                                <th>Müşteri</th>
+                                <th>İletişim</th>
+                                <th>Yatırım Türü</th>
+                                <th>Bütçe</th>
+                                <th>Tarih</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-deleted-list"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Bloglar Tab -->
+            <section id="content-bloglar" class="admin-tab-content admin-dashboard-container">
+                <header class="dash-top-bar">
+                    <h1>Blog Yazıları</h1>
+                    <div class="dash-user-actions">
+                        <div class="dash-user-profile">
+                            <i class="fas fa-user-circle"></i>
+                            <b>Admin</b>
+                        </div>
+                    </div>
+                </header>
+
+                <div class="dash-actions-row">
+                    <div class="dash-search-container">
+                        <i class="fas fa-search"></i>
+                        <input type="text" class="dash-search-input" id="blog-search" placeholder="Blog yazısı ara...">
+                    </div>
+                    <button class="btn-orange" onclick="showBlogModal()"><i class="fas fa-plus"></i> Yeni Yazı</button>
+                </div>
+
+                <div class="dash-table-card">
+                    <table class="dash-table">
+                        <thead>
+                            <tr>
+                                <th>Kapak</th>
+                                <th>Başlık</th>
+                                <th>Tarih</th>
+                                <th>Durum</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-blog-list"></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal Form -->
+    <div id="property-modal">
+        <div class="modal-content">
+            <h2 style="margin-bottom: 25px;">İlan Ekle</h2>
+            <form id="property-form">
+                <div class="form-grid">
+                    <div class="form-group full-width"><label>İlan Başlığı</label><input type="text" id="title"
+                            required></div>
+                    <div class="form-group full-width"><label>Konum</label><input type="text" id="location" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Kategori</label>
+                        <select id="category" onchange="toggleCategoryFields()">
+                            <option value="Konut">Konut</option>
+                            <option value="Arsa">Arsa</option>
+                            <option value="İşyeri">İşyeri</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>İşlem Türü</label>
+                        <select id="type">
+                            <option value="Satılık">Satılık</option>
+                            <option value="Kiralık">Kiralık</option>
+                        </select>
+                    </div>
+                    <div id="konut-fields" class="full-width dynamic-section" style="display: block;">
+                        <div class="form-grid">
+                            <div class="form-group"><label>Oda Sayısı</label><input type="text" id="rooms"
+                                    placeholder="3+1"></div>
+                            <div class="form-group"><label>Kat</label><input type="text" id="floor"></div>
+                        </div>
+                    </div>
+                    <div id="arsa-fields" class="full-width dynamic-section">
+                        <div class="form-grid">
+                            <div class="form-group"><label>İmar Durumu</label><input type="text" id="zoningStatus"
+                                    placeholder="Konut İmarlı"></div>
+                            <div class="form-group"><label>Parcel</label><input type="text" id="parcel"></div>
+                        </div>
+                    </div>
+                    <div class="form-group"><label>Fiyat (₺)</label><input type="number" id="price" required></div>
+                    <div class="form-group"><label>m²</label><input type="number" id="sqm" required></div>
+                    <div class="form-group full-width">
+                        <label>Fotoğraf Yükle</label>
+                        <input type="file" id="property-image" accept="image/*">
+                        <input type="hidden" id="imageUrl">
+                    </div>
+                    <div class="form-group full-width"><label>Açıklama</label><textarea id="description"
+                            rows="3"></textarea></div>
+                </div>
+                <div style="display: flex; gap: 15px; margin-top: 30px;">
+                    <button type="submit" class="btn btn-primary" style="flex: 2;">Kaydet</button>
+                    <button type="button" class="btn btn-accent" onclick="hideModal()" style="flex: 1;">İptal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Blog Modal -->
+    <div id="blog-modal" style="display: none;" class="modal-overlay">
+        <div class="modal-content">
+            <h2 id="blog-modal-title" style="margin-bottom: 25px;">Yeni Blog Yazısı</h2>
+            <form id="blog-form">
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label>Yazı Başlığı</label>
+                        <input type="text" id="blog-title" required>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Kısa Özet (Excerpt)</label>
+                        <textarea id="blog-excerpt" rows="2" required></textarea>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Kapak Görseli Yükle</label>
+                        <input type="file" id="blog-image" accept="image/*">
+                        <input type="hidden" id="blog-imageUrl">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Blog İçeriği (HTML destekler)</label>
+                        <textarea id="blog-content" rows="10" placeholder="Yazı içeriğini buraya girin..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Yayın Tarihi</label>
+                        <input type="text" id="blog-date" placeholder="19.02.2026">
+                    </div>
+                </div>
+                <div style="display: flex; gap: 15px; margin-top: 30px;">
+                    <button type="submit" class="btn btn-primary" style="flex: 2;">Kaydet</button>
+                    <button type="button" class="btn btn-accent" onclick="hideBlogModal()"
+                        style="flex: 1;">İptal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <style>
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            backdrop-filter: blur(5px);
+        }
+    </style>
+
+    <script type="module">
+        import { supabase } from './src/supabase.ts';
+
+        // Session Check
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+            window.location.href = '/login.html';
+        }
+
+        // Logout Function
+        window.logout = async () => {
+            await supabase.auth.signOut();
+            window.location.href = '/login.html';
+        };
+
+        let properties = [];
+        let blogs = [];
+        let currentEditId = null;
+        let currentBlogEditId = null;
+        const formatter = new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', maximumFractionDigits: 0 });
+
+        // Initial Fetch
+        async function fetchData() {
+            const { data: props } = await supabase.from('properties').select('*').order('created_at', { ascending: false });
+            const { data: blogList } = await supabase.from('blogs').select('*').order('created_at', { ascending: false });
+            properties = props || [];
+            blogs = blogList || [];
+            renderProperties();
+            renderBlogs();
+        }
+        fetchData();
+
+        window.switchTab = (tabName) => {
+            document.querySelectorAll('.admin-tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+            document.getElementById('content-' + tabName).classList.add('active');
+            document.getElementById('tab-' + tabName).classList.add('active');
+            if (tabName === 'musteriler') renderCustomers();
+            if (tabName === 'silinenler') renderDeletedCustomers();
+            if (tabName === 'bloglar') renderBlogs();
+        }
+
+        window.showModal = () => {
+            if (!currentEditId) {
+                document.getElementById('property-form').reset();
+                document.querySelector('#property-modal h2').innerText = 'İlan Ekle';
+            }
+            document.getElementById('property-modal').style.display = 'flex';
+        };
+
+        window.hideModal = () => {
+            document.getElementById('property-modal').style.display = 'none';
+            document.getElementById('property-form').reset();
+            currentEditId = null;
+        }
+
+        window.showBlogModal = (id = null) => {
+            if (id) {
+                currentBlogEditId = id;
+                const b = blogs.find(x => x.id === id);
+                document.getElementById('blog-title').value = b.title;
+                document.getElementById('blog-excerpt').value = b.excerpt;
+                document.getElementById('blog-imageUrl').value = b.image_url;
+                document.getElementById('blog-content').value = b.content || '';
+                document.getElementById('blog-date').value = b.date;
+                document.getElementById('blog-modal-title').innerText = 'Blog Yazısını Düzenle';
+            } else {
+                currentBlogEditId = null;
+                document.getElementById('blog-form').reset();
+                document.getElementById('blog-imageUrl').value = '';
+                document.getElementById('blog-date').value = new Date().toLocaleDateString('tr-TR');
+                document.getElementById('blog-modal-title').innerText = 'Yeni Blog Yazısı';
+            }
+            document.getElementById('blog-modal').style.display = 'flex';
+        }
+
+        window.hideBlogModal = () => {
+            document.getElementById('blog-modal').style.display = 'none';
+        }
+
+        window.toggleCategoryFields = () => {
+            const cat = document.getElementById('category').value;
+            document.getElementById('konut-fields').style.display = cat === 'Konut' ? 'block' : 'none';
+            document.getElementById('arsa-fields').style.display = cat === 'Arsa' ? 'block' : 'none';
+        }
+
+        function renderProperties(props = properties) {
+            const list = document.getElementById('dash-property-list');
+            list.innerHTML = props.map(p => `
+          <tr>
+            <td>
+              <div class="dash-property-cell">
+                <img src="${p.image_url}" class="dash-property-img">
+                <div class="dash-property-title">
+                  ${p.title} 
+                  ${p.is_featured ? '<span class="featured-badge">Öne Çıkarıldı</span>' : ''}
+                </div>
+              </div>
+            </td>
+            <td>${p.location}</td>
+            <td><b>${formatter.format(p.price)}</b></td>
+            <td><span class="tag-pill tag-type">${p.type}</span></td>
+            <td><span class="tag-pill tag-status ${p.status === 'Pasif' ? 'passive' : ''}">${p.status || 'Aktif'}</span></td>
+            <td>${p.date || '17 Şub 2026'}</td>
+            <td style="position: relative;">
+              <i class="fas fa-ellipsis-h dash-more-btn" onclick="toggleDropdown(event, '${p.id}')"></i>
+              <div id="dropdown-${p.id}" class="dropdown-menu">
+                <div class="dropdown-item" onclick="editProp('${p.id}')"><i class="fas fa-edit"></i> Düzenle</div>
+                <div class="dropdown-item" onclick="window.location.href='/details.html?id=${p.id}'"><i class="fas fa-eye"></i> Görüntüle</div>
+                <div class="dropdown-item" onclick="toggleFeatured('${p.id}')">
+                  <i class="fas fa-star ${p.is_featured ? 'featured-star' : ''}"></i> 
+                  ${p.is_featured ? 'Öne Çıkarmayı Kaldır' : 'İlanı Öne Çıkar'}
+                </div>
+                <div class="dropdown-item" onclick="toggleStatus('${p.id}')">
+                  <i class="fas ${p.status === 'Pasif' ? 'fa-check-circle' : 'fa-ban'}"></i> 
+                  ${p.status === 'Pasif' ? 'Aktife Al' : 'Pasife Al'}
+                </div>
+                <div class="dropdown-item delete" onclick="deleteProp('${p.id}')"><i class="fas fa-trash"></i> Kaldır</div>
+              </div>
+            </td>
+          </tr>
+        `).join('');
+        }
+
+        window.toggleDropdown = (e, id) => {
+            e.stopPropagation();
+            document.querySelectorAll('.dropdown-menu').forEach(d => {
+                if (d.id !== 'dropdown-' + id) d.classList.remove('show');
+            });
+            const menu = document.getElementById('dropdown-' + id);
+            if (menu) menu.classList.toggle('show');
+        }
+
+        window.onclick = () => document.querySelectorAll('.dropdown-menu').forEach(d => d.classList.remove('show'));
+
+        async function uploadImage(file, bucket = 'emlak-images') {
+            try {
+                const fileExt = file.name.split('.').pop();
+                const fileName = `${Date.now()}-${Math.floor(Math.random() * 1000)}.${fileExt}`;
+                const filePath = `${fileName}`;
+
+                console.log(`Uploading to bucket: ${bucket}, path: ${filePath}`);
+
+                const { data, error } = await supabase.storage.from(bucket).upload(filePath, file);
+                if (error) {
+                    console.error('Supabase upload error:', error);
+                    throw error;
+                }
+
+                const { data: { publicUrl } } = supabase.storage.from(bucket).getPublicUrl(filePath);
+                return publicUrl;
+            } catch (err) {
+                console.error('Image upload failed:', err);
+                throw new Error(`Görsel yüklenemedi: ${err.message || 'Bilinmeyen hata'}`);
+            }
+        }
+
+        async function saveProp(propData) {
+            try {
+                if (currentEditId) {
+                    const { error } = await supabase.from('properties').update(propData).eq('id', currentEditId);
+                    if (error) throw error;
+                } else {
+                    const { error } = await supabase.from('properties').insert([{ ...propData, status: 'Aktif', is_featured: false }]);
+                    if (error) throw error;
+                }
+                await fetchData();
+            } catch (err) {
+                console.error('Save property error:', err);
+                alert(`İlan kaydedilirken hata oluştu: ${err.message}`);
+                throw err;
+            }
+        }
+
+        async function saveBlog(blogData) {
+            try {
+                if (currentBlogEditId) {
+                    const { error } = await supabase.from('blogs').update(blogData).eq('id', currentBlogEditId);
+                    if (error) throw error;
+                } else {
+                    const { error } = await supabase.from('blogs').insert([{ ...blogData, is_published: true, is_featured: false }]);
+                    if (error) throw error;
+                }
+                await fetchData();
+            } catch (err) {
+                console.error('Save blog error:', err);
+                alert(`Blog yazısı kaydedilirken hata oluştu: ${err.message}`);
+                throw err;
+            }
+        }
+
+        window.toggleFeatured = async (id) => {
+            const p = properties.find(x => x.id === id);
+            const featuredCount = properties.filter(x => x.is_featured).length;
+            if (!p.is_featured && featuredCount >= 3) {
+                alert('En fazla 3 adet ilanı öne çıkarabilirsiniz.');
+                return;
+            }
+            const { error } = await supabase.from('properties').update({ is_featured: !p.is_featured }).eq('id', id);
+            if (error) alert(error.message);
+            fetchData();
+        }
+
+        window.toggleStatus = async (id) => {
+            const p = properties.find(x => x.id === id);
+            const newStatus = p.status === 'Pasif' ? 'Aktif' : 'Pasif';
+            const { error } = await supabase.from('properties').update({ status: newStatus }).eq('id', id);
+            if (error) alert(error.message);
+            fetchData();
+        }
+
+        window.deleteProp = async (id) => {
+            if (confirm('İlan silinsin mi?')) {
+                const { error } = await supabase.from('properties').delete().eq('id', id);
+                if (error) alert(error.message);
+                fetchData();
+            }
+        }
+
+        window.editProp = (id) => {
+            const p = properties.find(prop => prop.id === id);
+            if (!p) return;
+            currentEditId = id;
+            document.getElementById('title').value = p.title;
+            document.getElementById('location').value = p.location;
+            document.getElementById('category').value = p.category;
+            document.getElementById('type').value = p.type;
+            document.getElementById('price').value = p.price;
+            document.getElementById('sqm').value = p.sqm;
+            document.getElementById('imageUrl').value = p.image_url;
+            document.getElementById('description').value = p.description || '';
+            if (p.category === 'Konut') {
+                document.getElementById('rooms').value = p.rooms || '';
+                document.getElementById('floor').value = p.floor || '';
+            } else if (p.category === 'Arsa') {
+                document.getElementById('zoningStatus').value = p.zoning_status || '';
+            }
+            toggleCategoryFields();
+            showModal();
+            document.querySelector('#property-modal h2').innerText = 'İlanı Düzenle';
+        }
+
+        async function renderCustomers() {
+            const { data: customers } = await supabase.from('customers').select('*').order('created_at', { ascending: false });
+            const list = document.getElementById('admin-customer-list');
+            if (!list) return;
+            list.innerHTML = (customers || []).map((c) => `
+          <tr>
+            <td><b>${c.name}</b></td>
+            <td>${c.email}<br><small>${c.phone || '-'}</small></td>
+            <td><span class="tag-pill tag-type">${c.type}</span></td>
+            <td>${c.budget}</td>
+            <td>
+              <select class="status-select ${getStatusClass(c.status)}" onchange="updateCustomerStatus('${c.id}', this.value)">
+                <option value="Yeni" ${c.status === 'Yeni' || !c.status ? 'selected' : ''}>Yeni Müşteri</option>
+                <option value="İletişime Geçildi" ${c.status === 'İletişime Geçildi' ? 'selected' : ''}>İletişime Geçildi</option>
+                <option value="Tekrar Aranacak" ${c.status === 'Tekrar Aranacak' ? 'selected' : ''}>Tekrar Aranacak</option>
+              </select>
+            </td>
+            <td>${c.date}</td>
+            <td><button class="btn-delete-cust" onclick="deleteCustomer('${c.id}')"><i class="fas fa-trash-alt"></i></button></td>
+          </tr>
+        `).join('');
+        }
+
+        function renderBlogs() {
+            const list = document.getElementById('admin-blog-list');
+            if (!list) return;
+            list.innerHTML = blogs.map(b => `
+                <tr>
+                    <td><img src="${b.image_url}" class="dash-property-img"></td>
+                    <td>
+                        <div class="dash-property-title">
+                            ${b.title}
+                            ${b.is_featured ? '<span class="featured-badge">Öne Çıkarıldı</span>' : ''}
+                        </div>
+                    </td>
+                    <td>${b.date}</td>
+                    <td>
+                        <span class="tag-pill ${b.is_published ? 'status-published' : 'status-hidden'}">
+                            ${b.is_published ? 'Yayında' : 'Gizli'}
+                        </span>
+                    </td>
+                    <td style="position: relative;">
+                        <i class="fas fa-ellipsis-h dash-more-btn" onclick="toggleDropdown(event, 'blog-${b.id}')"></i>
+                        <div id="dropdown-blog-${b.id}" class="dropdown-menu">
+                            <div class="dropdown-item" onclick="showBlogModal('${b.id}')"><i class="fas fa-edit"></i> Düzenle</div>
+                            <div class="dropdown-item" onclick="toggleBlogProp('${b.id}', 'is_published')">
+                                <i class="fas ${b.is_published ? 'fa-eye-slash' : 'fa-eye'}"></i> 
+                                ${b.is_published ? 'Yayından Kaldır' : 'Yayına Al'}
+                            </div>
+                            <div class="dropdown-item" onclick="toggleBlogProp('${b.id}', 'is_featured')">
+                                <i class="fas fa-star ${b.is_featured ? 'featured-star active' : ''}"></i> 
+                                ${b.is_featured ? 'Öne Çıkarmayı Kaldır' : 'Öne Çıkar'}
+                            </div>
+                            <div class="dropdown-item delete" onclick="deleteBlog('${b.id}')"><i class="fas fa-trash"></i> Sil</div>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        window.toggleBlogProp = async (id, prop) => {
+            const b = blogs.find(x => x.id === id);
+            const { error } = await supabase.from('blogs').update({ [prop]: !b[prop] }).eq('id', id);
+            if (error) alert(error.message);
+            fetchData();
+        }
+
+        window.deleteBlog = async (id) => {
+            if (confirm('Blog yazısı silinsin mi?')) {
+                const { error } = await supabase.from('blogs').delete().eq('id', id);
+                if (error) alert(error.message);
+                fetchData();
+            }
+        }
+
+        function getStatusClass(status) {
+            if (status === 'İletişime Geçildi') return 'status-gelindi';
+            if (status === 'Tekrar Aranacak') return 'status-tekrar';
+            return 'status-yeni';
+        }
+
+        window.updateCustomerStatus = async (id, newStatus) => {
+            const { error } = await supabase.from('customers').update({ status: newStatus }).eq('id', id);
+            if (error) alert(error.message);
+            renderCustomers();
+        }
+
+        window.deleteCustomer = async (id) => {
+            if (confirm('Bu müşteri silinsin mi?')) {
+                const { error } = await supabase.from('customers').delete().eq('id', id);
+                if (error) alert(error.message);
+                renderCustomers();
+            }
+        }
+
+
+        document.getElementById('dash-search').oninput = (e) => {
+            const q = e.target.value.toLowerCase();
+            const filtered = properties.filter(p => p.title.toLowerCase().includes(q) || p.location.toLowerCase().includes(q));
+            renderProperties(filtered);
+        }
+
+        if (document.getElementById('blog-search')) {
+            document.getElementById('blog-search').oninput = (e) => {
+                const q = e.target.value.toLowerCase();
+                const filtered = blogs.filter(b => b.title.toLowerCase().includes(q) || b.excerpt.toLowerCase().includes(q));
+                renderBlogs(filtered);
+            }
+        }
+
+        document.getElementById('property-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.innerText;
+
+            try {
+                btn.disabled = true;
+                btn.innerText = 'Yükleniyor...';
+
+                const imageFile = document.getElementById('property-image').files[0];
+                let imageUrl = document.getElementById('imageUrl').value;
+
+                if (imageFile) {
+                    imageUrl = await uploadImage(imageFile, 'emlak-images');
+                }
+
+                const propData = {
+                    title: document.getElementById('title').value,
+                    location: document.getElementById('location').value,
+                    category: document.getElementById('category').value,
+                    type: document.getElementById('type').value,
+                    price: Number(document.getElementById('price').value),
+                    sqm: Number(document.getElementById('sqm').value),
+                    image_url: imageUrl,
+                    description: document.getElementById('description').value,
+                    rooms: document.getElementById('rooms').value,
+                    floor: document.getElementById('floor').value,
+                    zoning_status: document.getElementById('zoningStatus').value
+                };
+                await saveProp(propData);
+                hideModal();
+            } catch (err) {
+                alert(err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = originalText;
+            }
+        }
+
+        document.getElementById('blog-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.innerText;
+
+            try {
+                btn.disabled = true;
+                btn.innerText = 'Yükleniyor...';
+
+                const imageFile = document.getElementById('blog-image').files[0];
+                let imageUrl = document.getElementById('blog-imageUrl').value;
+
+                if (imageFile) {
+                    imageUrl = await uploadImage(imageFile, 'emlak-images');
+                }
+
+                const blogData = {
+                    title: document.getElementById('blog-title').value,
+                    excerpt: document.getElementById('blog-excerpt').value,
+                    image_url: imageUrl,
+                    content: document.getElementById('blog-content').value,
+                    date: document.getElementById('blog-date').value
+                };
+                await saveBlog(blogData);
+                hideBlogModal();
+            } catch (err) {
+                alert(err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = originalText;
+            }
+        }
+
+        fetchData();
+    </script>
+</body>
+
+</html>

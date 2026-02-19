@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yönetici Girişi | EmlakAdvisor</title>
+    <link rel="stylesheet" href="/src/style.css">
+    <!-- Anti-FOUC Script -->
+    <style>
+        body {
+            opacity: 0;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.body.style.opacity = "1";
+        });
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .login-container {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f1f2f6;
+        }
+
+        .login-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-card h2 {
+            margin-bottom: 30px;
+            color: var(--primary-color);
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .login-form input {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        .login-btn {
+            background: var(--primary-color);
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .login-btn:hover {
+            background: #3c52b2;
+            transform: translateY(-2px);
+        }
+
+        .error-message {
+            color: #e03131;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="logo" style="margin-bottom: 20px; font-size: 2rem;">Emlak<span>Advisor</span></div>
+            <h2>Yönetici Girişi</h2>
+            <form class="login-form" id="login-form">
+                <input type="email" id="email" placeholder="E-posta" required>
+                <input type="password" id="password" placeholder="Şifre" required>
+                <button type="submit" class="login-btn">Giriş Yap</button>
+                <div class="error-message" id="error-msg">Geçersiz giriş bilgileri.</div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        import { supabase } from './src/supabase.ts';
+
+        const loginForm = document.getElementById('login-form');
+        const errorMsg = document.getElementById('error-msg');
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email,
+                password,
+            });
+
+            if (data.user) {
+                window.location.href = '/admin.html';
+            } else {
+                errorMsg.style.display = 'block';
+                errorMsg.textContent = error.message;
+            }
+        });
+
+        // Check if already logged in
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+            window.location.href = '/admin.html';
+        }
+    </script>
+</body>
+
+</html>

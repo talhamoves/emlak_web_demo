@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hakkımızda | Emlak Advisor</title>
+    <link rel="stylesheet" href="/src/style.css">
+    <!-- Anti-FOUC Script -->
+    <style>
+        body {
+            opacity: 0;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.body.style.opacity = "1";
+        });
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <span><i class="fas fa-building"></i> Emlak Advisor</span>
+            </div>
+            <div class="top-bar-right">
+                <a href="tel:+905551234567"><i class="fas fa-phone-alt"></i> +90 555 123 45 67</a>
+                <a href="mailto:info@emlakadvisor.com"><i class="fas fa-envelope"></i> info@emlakadvisor.com</a>
+            </div>
+        </div>
+    </div>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">Emlak<span>Advisor</span></div>
+                <div class="menu-toggle" id="mobile-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="/"><i class="fas fa-home"></i> Ana Sayfa</a></li>
+                    <li><a href="/listings.html"><i class="fas fa-list"></i> İlanlar</a></li>
+                    <li><a href="/blog.html"><i class="fas fa-newspaper"></i> Blog</a></li>
+                    <li><a href="/about.html"><i class="fas fa-info-circle"></i> Hakkımızda</a></li>
+                    <li><a href="/admin.html"><i class="fas fa-user-shield"></i> Yönetici</a></li>
+                </ul>
+                <a href="/#iletisim" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Bize Ulaşın</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container" style="padding: 100px 20px;">
+        <section style="text-align: center; max-width: 800px; margin: 0 auto 80px;">
+            <h1 style="font-size: 3rem; margin-bottom: 30px;">Doğru Yatırımın Adresi</h1>
+            <p style="font-size: 1.2rem; color: var(--light-text);">Emlak Advisor olarak, 10 yılı aşkın tecrübemizle
+                gayrimenkul sektöründe güven ve şeffaflığı temsil ediyoruz. Hedefimiz, müşterilerimizin hayallerindeki
+                evi veya en karlı yatırımı bulmalarını sağlamaktır.</p>
+        </section>
+
+        <div
+            style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; margin-bottom: 100px;">
+            <div>
+                <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=800"
+                    style="width: 100%; border-radius: 30px; box-shadow: var(--shadow);">
+            </div>
+            <div>
+                <h2 style="margin-bottom: 25px;">Neden Biz?</h2>
+                <ul style="list-style: none;">
+                    <li style="margin-bottom: 20px; display: flex; gap: 15px;">
+                        <i class="fas fa-check-circle" style="color: var(--accent-color); font-size: 1.5rem;"></i>
+                        <div>
+                            <b>Uzman Kadro:</b> Sektörün içinden gelen, eğitimli ve deneyimli danışmanlar.
+                        </div>
+                    </li>
+                    <li style="margin-bottom: 20px; display: flex; gap: 15px;">
+                        <i class="fas fa-check-circle" style="color: var(--accent-color); font-size: 1.5rem;"></i>
+                        <div>
+                            <b>Geniş Portföy:</b> Sadece ilan sitelerinde değil, kapalı portföylerimize de erişim
+                            imkanı.
+                        </div>
+                    </li>
+                    <li style="margin-bottom: 20px; display: flex; gap: 15px;">
+                        <i class="fas fa-check-circle" style="color: var(--accent-color); font-size: 1.5rem;"></i>
+                        <div>
+                            <b>Dürüstlük Seviyesi:</b> Tüm süreçlerde tam şeffaflık ve dürüstlük ilkesi.
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-info">
+                    <h4>Emlak Advisor</h4>
+                    <p>Emlak Advisor, profesyonel ekibi ve geniş portföyü ile Türkiye'nin her noktasında gayrimenkul
+                        danışmanlığı hizmeti sunmaktadır.</p>
+                </div>
+                <div class="footer-contact">
+                    <h4>İletişim</h4>
+                    <ul>
+                        <li><i class="fas fa-phone"></i> +90 212 555 00 00</li>
+                        <li><i class="fas fa-envelope"></i> info@emlakadvisor.com</li>
+                    </ul>
+                </div>
+                <div class="footer-social">
+                    <h4>Sosyal Medya</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2026 Emlak Advisor. Tüm hakları saklıdır.
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

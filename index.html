@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Emlak Advisor | Kendinize En Uygun Yatırımı Bulun</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/src/style.css">
+  <!-- Anti-FOUC Script -->
+  <style>
+    body {
+      opacity: 0;
+    }
+  </style>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      document.body.style.opacity = "1";
+    });
+  </script>
+</head>
+
+<body>
+  <div class="top-bar">
+    <div class="container top-bar-content">
+      <div class="top-bar-left">
+        <span><i class="fas fa-building"></i> Emlak Advisor</span>
+      </div>
+      <div class="top-bar-right">
+        <a href="tel:+905551234567"><i class="fas fa-phone-alt"></i> +90 555 123 45 67</a>
+        <a href="mailto:info@emlakadvisor.com"><i class="fas fa-envelope"></i> info@emlakadvisor.com</a>
+      </div>
+    </div>
+  </div>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="logo">Emlak<span>Advisor</span></div>
+        <div class="menu-toggle" id="mobile-menu">
+          <i class="fas fa-bars"></i>
+        </div>
+        <ul class="nav-links">
+          <li><a href="/"><i class="fas fa-home"></i> Ana Sayfa</a></li>
+          <li><a href="/listings.html"><i class="fas fa-list"></i> İlanlar</a></li>
+          <li><a href="/blog.html"><i class="fas fa-newspaper"></i> Blog</a></li>
+          <li><a href="/about.html"><i class="fas fa-info-circle"></i> Hakkımızda</a></li>
+          <li><a href="/admin.html"><i class="fas fa-user-shield"></i> Yönetici</a></li>
+        </ul>
+        <a href="/index.html#iletisim" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Bize Ulaşın</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h1><span>Profesyonel Gayrimenkul Danışmanlığı</span>Kendinize En Uygun Yatırımı Bulun</h1>
+        <p>Türkiye’nin en iyi konumlarında seçkin gayrimenkul portföyümüzle yanınızdayız.</p>
+
+        <div class="search-form-wrapper">
+          <div class="form-group">
+            <label>Konum</label>
+            <input type="text" id="loc-search" placeholder="Şehir, ilçe veya semt...">
+          </div>
+          <div class="form-group">
+            <label>Emlak Türü</label>
+            <select id="type-filter">
+              <option value="all">Tümü</option>
+              <option value="Satılık">Satılık</option>
+              <option value="Kiralık">Kiralık</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Min Fiyat</label>
+            <input type="number" id="min-price" placeholder="₺ 0">
+          </div>
+          <div class="form-group">
+            <label>Max Fiyat</label>
+            <input type="number" id="max-price" placeholder="₺ Limitsiz">
+          </div>
+          <button class="btn btn-primary" id="search-btn">Ara</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="container features">
+      <div class="feature-box">
+        <i class="fas fa-hand-holding-usd"></i>
+        <h3>Güvenilir Yatırım</h3>
+        <p>Yüksek getiri potansiyeline sahip, risk analizleri yapılmış en güvenli yatırım fırsatları.</p>
+      </div>
+      <div class="feature-box">
+        <i class="fas fa-history"></i>
+        <h3>10+ Yıllık Tecrübe</h3>
+        <p>Sektördeki on yılı aşkın tecrübemizle piyasa dinamiklerini sizin için takip ediyoruz.</p>
+      </div>
+      <div class="feature-box">
+        <i class="fas fa-chart-pie"></i>
+        <h3>Stratejik Analiz</h3>
+        <p>Gayrimenkulünüzü sadece bir bina değil, verilerle desteklenen bir yatırım aracı olarak görüyoruz.</p>
+      </div>
+      <div class="feature-box">
+        <i class="fas fa-award"></i>
+        <h3>Profesyonel Danışmanlık</h3>
+        <p>Süreç boyunca şeffaf, sonuç odaklı ve tamamen size özel profesyonel hizmet.</p>
+      </div>
+    </section>
+
+    <section class="featured-properties container">
+      <div class="section-header">
+        <h2><i class="fas fa-star" style="color: var(--accent-color); margin-right: 15px;"></i>Öne Çıkan Fırsatlar</h2>
+        <p>Sizler için seçtiğimiz, kaçırılmayacak yatırım ve yaşam fırsatları.</p>
+      </div>
+      <div class="property-grid" id="featured-list">
+        <!-- Öne çıkan ilanlar JS ile buraya gelecek -->
+      </div>
+      <div style="text-align: center; margin-top: 50px;">
+        <a href="/listings.html" class="btn btn-primary">Tüm İlanları Gör</a>
+      </div>
+    </section>
+
+    <!-- NEW CTA SECTION -->
+    <section class="cta-contact-section">
+      <div class="container">
+        <div class="cta-banner">
+          <div class="cta-content">
+            <h2>Hayalinizdeki Evi Bulmak İçin <br><span>Hemen İletişime Geçin</span></h2>
+            <p>Uzman danışmanlarımız size en uygun gayrimenkul seçeneklerini sunmak için hazır.</p>
+            <a href="#investment-form-section" class="btn btn-primary">Bize Ulaşın</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEW BLOG SECTION -->
+    <section class="blog-section container">
+      <div class="section-header">
+        <h2><i class="fas fa-feather-alt" style="color: var(--accent-color); margin-right: 15px;"></i>Bilgi Köşesi &
+          Blog</h2>
+        <p>Gayrimenkul dünyasından en son haberler, yatırım tavsiyeleri ve rehberler.</p>
+      </div>
+      <div class="blog-grid" id="blog-list">
+        <!-- Blog yazıları JS ile buraya gelecek -->
+      </div>
+      <div style="text-align: center; margin-top: 50px;">
+        <a href="/blog.html" class="btn btn-secondary">Tüm Blog Yazılarını Gör</a>
+      </div>
+    </section>
+
+    <section class="dark-investment-section" id="investment-form-section">
+      <div class="container investment-grid">
+        <div class="investment-text">
+          <span class="investment-badge">FIRSATLARI KAÇIRMAYIN</span>
+          <h2><i class="fas fa-gem" style="color: var(--accent-color); margin-right: 15px;"></i>Yatırım Fırsatlarından
+            <br><span>İlk Siz Haberdar Olun</span>
+          </h2>
+          <p>Bütçenize ve tercihlerinize uygun gayrimenkul fırsatları ortaya çıktığında size özel bilgilendirme
+            yapıyoruz. En değerli yatırım fırsatlarını kaçırmayın.</p>
+
+          <ul class="benefit-list">
+            <li><i class="fas fa-bolt"></i> Yeni fırsatlardan anında haberdar olun</li>
+            <li><i class="fas fa-hourglass-start"></i> Piyasaya çıkmadan önce bilgi alın</li>
+            <li><i class="fas fa-chart-line"></i> Size özel yatırım tavsiyeleri</li>
+            <li><i class="fas fa-lock"></i> Bilgileriniz %100 gizli tutulur</li>
+          </ul>
+        </div>
+
+        <div class="investment-card">
+          <div class="card-header">
+            <h3>Yatırım Tercihlerinizi Paylaşın</h3>
+            <p>Size en uygun fırsatları sunabilmemiz için bilgilerinizi doldurun</p>
+          </div>
+
+          <form id="investment-form" class="card-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Ad Soyad *</label>
+                <input type="text" id="cust-name" required placeholder="Adınız ve soyadınız">
+              </div>
+              <div class="form-group">
+                <label>E-posta *</label>
+                <input type="email" id="cust-email" required placeholder="ornek@email.com">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Telefon (İsteğe bağlı)</label>
+                <input type="tel" id="cust-phone" placeholder="0532 xxx xx xx">
+              </div>
+              <div class="form-group">
+                <label>Yatırım Tercihi *</label>
+                <select id="cust-type" required>
+                  <option value="" disabled selected>Seçiniz</option>
+                  <option value="Konut">Konut</option>
+                  <option value="Arsa/Arazi">Arsa / Arazi</option>
+                  <option value="İşyeri">İşyeri</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Yatırım Bütçesi *</label>
+              <select id="cust-budget" required>
+                <option value="" disabled selected>Seçiniz</option>
+                <option value="0-2M">0 - 2.000.000 TL</option>
+                <option value="2-5M">2.000.000 - 5.000.000 TL</option>
+                <option value="5-10M">5.000.000 - 10.000.000 TL</option>
+                <option value="10M+">10.000.000 TL +</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Ek Notlar (İsteğe bağlı)</label>
+              <textarea id="cust-notes" placeholder="Yatırım tercihleriniz hakkında eklemek istediğiniz notlar..."
+                rows="3"></textarea>
+            </div>
+
+            <button type="submit" class="btn-cta">Fırsatlardan Haberdar Ol</button>
+            <p class="form-disclaimer">Bilgileriniz gizli tutulacak ve sadece size uygun fırsatlar için kullanılacaktır.
+            </p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-info" id="about-info">
+          <h4>Emlak Advisor</h4>
+          <p>Emlak Advisor, profesyonel ekibi ve geniş portföyü ile Türkiye'nin her noktasında gayrimenkul danışmanlığı
+            hizmeti sunmaktadır. Müşterilerimiz için en doğru yatırımı en kısa sürede bulmayı hedefliyoruz.</p>
+        </div>
+        <div class="footer-contact" id="iletisim">
+          <h4>İletişim</h4>
+          <ul>
+            <li><i class="fas fa-phone"></i> +90 212 555 00 00</li>
+            <li><i class="fas fa-envelope"></i> info@emlakadvisor.com</li>
+            <li><i class="fas fa-map-marker-alt"></i> İstanbul, Türkiye</li>
+          </ul>
+        </div>
+        <div class="footer-social">
+          <h4>Sosyal Medya</h4>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="copyright">
+        &copy; 2026 Emlak Advisor. Tüm hakları saklıdır.
+      </div>
+    </div>
+  </footer>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
+</html>

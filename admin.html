@@ -339,9 +339,13 @@
                     <div class="form-group"><label>Fiyat (₺)</label><input type="number" id="price" required></div>
                     <div class="form-group"><label>m²</label><input type="number" id="sqm" required></div>
                     <div class="form-group full-width">
-                        <label>Fotoğraf Yükle</label>
+                        <label>Kapak Fotoğrafı</label>
                         <input type="file" id="property-image" accept="image/*">
                         <input type="hidden" id="imageUrl">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Galeri Fotoğrafları (Çoklu Seçim)</label>
+                        <input type="file" id="property-gallery" accept="image/*" multiple>
                     </div>
                     <div class="form-group full-width"><label>Açıklama</label><textarea id="description"
                             rows="3"></textarea></div>
@@ -769,10 +773,19 @@
                 btn.innerText = 'Yükleniyor...';
 
                 const imageFile = document.getElementById('property-image').files[0];
+                const galleryFiles = document.getElementById('property-gallery').files;
                 let imageUrl = document.getElementById('imageUrl').value;
+                let galleryUrls = []; // Existing gallery URLs logic would need to be handled if editing, for now we just add new ones or overwrite
 
                 if (imageFile) {
                     imageUrl = await uploadImage(imageFile, 'emlak-images');
+                }
+
+                if (galleryFiles && galleryFiles.length > 0) {
+                    for (let i = 0; i < galleryFiles.length; i++) {
+                        const url = await uploadImage(galleryFiles[i], 'emlak-images');
+                        galleryUrls.push(url);
+                    }
                 }
 
                 const propData = {
@@ -783,6 +796,7 @@
                     price: Number(document.getElementById('price').value),
                     sqm: Number(document.getElementById('sqm').value),
                     image_url: imageUrl,
+                    gallery: galleryUrls.length > 0 ? galleryUrls : null, // Store as array
                     description: document.getElementById('description').value,
                     rooms: document.getElementById('rooms').value,
                     floor: document.getElementById('floor').value,

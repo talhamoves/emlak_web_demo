@@ -135,7 +135,7 @@ async function renderBlogDetail() {
         <h1>${b.title}</h1>
       </header>
       <div class="blog-detail-image" style="background-image: url('${b.image_url}')"></div>
-      <div class="blog-detail-content">
+      <div class="blog-detail-content formatted-content">
         ${b.content || b.excerpt}
       </div>
     </article>

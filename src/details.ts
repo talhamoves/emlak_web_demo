@@ -3,36 +3,36 @@ import { supabase } from './supabase';
 const formatter = new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', maximumFractionDigits: 0 });
 
 async function getPropertyById(id: string) {
-    const { data, error } = await supabase.from('properties').select('*').eq('id', id).single();
-    if (error) return null;
-    return data;
+  const { data, error } = await supabase.from('properties').select('*').eq('id', id).single();
+  if (error) return null;
+  return data;
 }
 
 // Make explicit global function for the onclick handler in the HTML string
 (window as any).changeMainImage = (url: string) => {
-    const mainImage = document.querySelector('.main-image') as HTMLElement;
-    if (mainImage) mainImage.style.backgroundImage = `url('${url}')`;
+  const mainImage = document.querySelector('.main-image') as HTMLElement;
+  if (mainImage) mainImage.style.backgroundImage = `url('${url}')`;
 };
 
 function renderDetails(p: any) {
-    const root = document.getElementById('details-root');
-    if (!root) return;
+  const root = document.getElementById('details-root');
+  if (!root) return;
 
-    if (!p) {
-        root.innerHTML = '<h1>İlan bulunamadı.</h1>';
-        return;
-    }
+  if (!p) {
+    root.innerHTML = '<h1>İlan bulunamadı.</h1>';
+    return;
+  }
 
-    // Build gallery HTML logic safely
-    let galleryHtml = '';
-    if (p.gallery && p.gallery.length > 0) {
-        galleryHtml = p.gallery.map((img: string) =>
-            `<div class="side-image" style="background-image: url('${img}')" onclick="window.changeMainImage('${img}')"></div>`
-        ).join('');
-    }
+  // Build gallery HTML logic safely
+  let galleryHtml = '';
+  if (p.gallery && p.gallery.length > 0) {
+    galleryHtml = p.gallery.map((img: string) =>
+      `<div class="side-image" style="background-image: url('${img}')" onclick="window.changeMainImage('${img}')"></div>`
+    ).join('');
+  }
 
-    // Construct the full HTML
-    root.innerHTML = `
+  // Construct the full HTML
+  root.innerHTML = `
       <div class="details-gallery">
         <div class="main-image" style="background-image: url('${p.image_url}')"></div>
         <div class="side-images" id="gallery-container">
@@ -75,7 +75,7 @@ function renderDetails(p: any) {
 
           <div class="details-description">
             <h3>Açıklama</h3>
-            <p>${p.description || 'Açıklama bulunmamaktadır.'}</p>
+            <div class="formatted-content">${p.description || 'Açıklama bulunmamaktadır.'}</div>
           </div>
 
            <div class="details-features-list" style="margin-top: 30px; grid-template-columns: repeat(2, 1fr);">
@@ -107,10 +107,10 @@ function renderDetails(p: any) {
 }
 
 export async function initDetailsPage() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get('id');
-    if (id) {
-        const property = await getPropertyById(id);
-        renderDetails(property);
-    }
+  const urlParams = new URLSearchParams(window.location.search);
+  const id = urlParams.get('id');
+  if (id) {
+    const property = await getPropertyById(id);
+    renderDetails(property);
+  }
 }
